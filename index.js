@@ -3,9 +3,18 @@ const express = require("express");
 
 app = express();
 
+cron.schedule("* * * * *", () => {
+    console.log("Executando a tarefa a cada 1 minuto");
+    //readExcel();
+    Post();
+    //get();
+});
+
+app.listen(1313);
+
 function Post (){
     const axios = require('axios');
-    const url = "http://webhook.site/530644ba-59ac-49fa-b97f-55ec89bd8a8e";
+    const url = "https://webhook.site/97b731f0-81bd-4791-bc72-0a2ca25b4a39";
     axios.post(url, {
         todo: 'Buy the milk'
     })
@@ -21,7 +30,7 @@ function Post (){
 
 function get(){
     const axios = require('axios');
-    const url = "http://webhook.site/530644ba-59ac-49fa-b97f-55ec89bd8a8e";
+    const url = "https://webhook.site/97b731f0-81bd-4791-bc72-0a2ca25b4a39";
     try{
         console.log(axios.get(url));
     }catch (error) {
@@ -42,12 +51,3 @@ function readExcel(){
         }
       }
 }
-
-cron.schedule("* * * * *", () => {
-    console.log("Executando a tarefa a cada 1 minuto");
-    readExcel();
-    //Post();
-    //get();
-});
-
-app.listen(1313);
