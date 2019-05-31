@@ -1,6 +1,7 @@
 {"web":
     {   "client_id":"629409619485-0i0q0lkfm58rrijrlmmvaiakultb537u.apps.googleusercontent.com",
-        "project_id":"sige-242121","auth_uri":"https://accounts.google.com/o/oauth2/auth",
+        "project_id":"sige-242121",
+        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
         "token_uri":"https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
         "client_secret":"rNdK8jfwskoA9yt9o_4YrH5a",
