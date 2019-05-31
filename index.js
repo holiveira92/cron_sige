@@ -8,17 +8,15 @@ cron.schedule("* * * * *", () => {
     get();
 });
 
-app.listen(1313);
+app.listen(1314);
 
-function Post (){
+function Post ($json){
     const axios = require('axios');
-    const url = "https://webhook.site/97b731f0-81bd-4791-bc72-0a2ca25b4a39";
-    axios.post(url, {
-        todo: 'Buy the milk'
-    })
+    const url = "URL_RECEBIMENTO";
+    axios.post(url,$json)
     .then((res) => {
-        console.log(`statusCode: ${res.statusCode}`);
-        console.log(res);
+        //console.log(`statusCode: ${res.statusCode}`);
+        //console.log(res);
     })
     .catch((error) => {
         console.error(error)
@@ -38,18 +36,26 @@ function get(){
     var retorno;
     var str = "";
     try{
+        //trocar o token abaixo pegando nesse link: https://holiveiratestes.com.br/google_api/
+        //inspecionar -> network -> oauth2 google terá o access_token para usar abaixo
         axios.get(url, { headers: { "Authorization": "Bearer ya29.GlwaB1o18UJosF4NpF0Bbb8ASjnPK8KtlbylxHq8lsnOQZa-N_OMVA9kjhgwA5vpzsO7i5dWLkTAU2iwuz8CtYFdkevERBNLVXr6wCYkjRjM1FGVvTcBK1RwMKhubg" } })
         .then(response => {
             retorno = response.data;
             linhas = retorno.values;
+            Post(linhas);
+            return true;
+            /*
             //retorno = JSON.parse(retorno);
             var count = linhas.length;
-            console.log(count + " pedidos encontrados");
             for (var i in linhas){
                 val = linhas[i].toString();
                 str = val.split(",");
-                //console.log("linha " + i.toString() + " "   + str);
+                var num_pedido = str[0].toString();
+                if(num_pedido.trim() !== '' || num_pedido.length !== 0){
+                    console.log(num_pedido);
+                }
             }
+            */
         })
         .catch((error) => {
             console.log('error ' + error);
