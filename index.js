@@ -4,58 +4,74 @@ const express = require("express");
 app = express();
 
 cron.schedule("* * * * *", () => {
-    console.log("Executando a tarefa a cada 1 minuto");
+    console.log("Atualizando a cada 1 minuto " + getDateTime());
     get();
 });
 
 app.listen(1314);
 
+function getDateTime() {
+
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+
+}
+
 function Post ($json){
     const axios = require('axios');
-    const url = "URL_RECEBIMENTO";
+    const url = "http://localhost/delivery/admin_deliveries/enviar_entrega/";
     axios.post(url,$json)
     .then((res) => {
-        //console.log(`statusCode: ${res.statusCode}`);
-        //console.log(res);
+        console.log(res.data);
     })
     .catch((error) => {
-        console.error(error)
+        console.error(error);
     });
 
 }
 
 function get(){
-
-    var params = {
-        spreadsheetId: 'xxx',  // TODO: Update placeholder value.
-        range: 'Pedidos',  // TODO: Update placeholder value.
-    };
-    
     const axios = require('axios');
     const url = "https://sheets.googleapis.com/v4/spreadsheets/1xS2HaWzcSsRSWo1V96lcCde9CRhRZj904PHHX2Gb5OM/values/Pedidos?key=AIzaSyCvOKzgefAIc0k-HKPrZlrpE8KVeKAeWXo";
     var retorno;
     var str = "";
+    var arr = [];
     try{
         //trocar o token abaixo pegando nesse link: https://holiveiratestes.com.br/google_api/
         //inspecionar -> network -> oauth2 google terá o access_token para usar abaixo
-        axios.get(url, { headers: { "Authorization": "Bearer ya29.GlwaB1o18UJosF4NpF0Bbb8ASjnPK8KtlbylxHq8lsnOQZa-N_OMVA9kjhgwA5vpzsO7i5dWLkTAU2iwuz8CtYFdkevERBNLVXr6wCYkjRjM1FGVvTcBK1RwMKhubg" } })
+        axios.get(url, {headers: { "Authorization": "Bearer ya29.GlwbB8R5JzQtdx_OFLOku1mawAFr30GzR-02dUk3PNh88lRx6UZwKDtIvOM5PGyZZMUsnAEuvRRaBKps8Pwwlu1B6avhjvEiu5Wv6Zavmp9ZPJYrWZtJZzH9i-ar6A" } })
         .then(response => {
             retorno = response.data;
             linhas = retorno.values;
-            Post(linhas);
-            return true;
-            /*
-            //retorno = JSON.parse(retorno);
-            var count = linhas.length;
             for (var i in linhas){
                 val = linhas[i].toString();
                 str = val.split(",");
                 var num_pedido = str[0].toString();
                 if(num_pedido.trim() !== '' || num_pedido.length !== 0){
-                    console.log(num_pedido);
+                    arr.push(str);
                 }
             }
-            */
+            //console.log(JSON.stringify(arr));
+            Post(JSON.stringify(arr));
+            return true;
         })
         .catch((error) => {
             console.log('error ' + error);
@@ -63,5 +79,6 @@ function get(){
 
     }catch (error) {
         console.error(error);
-    }    
+    }
+    
 }
